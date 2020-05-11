@@ -1,7 +1,7 @@
 {
   "name": "node-cas-authentication",
   "version": "0.0.10",
-  "description": "A CAS authentication library designed to be used as middleware for an Express server.",
+  "description": "(Forked version) A CAS authentication library designed to be used as middleware for an Express server.",
   "keywords": [
     "cas",
     "central authentication service",
@@ -12,16 +12,16 @@
     "middleware",
     "express"
   ],
-  "homepage": "https://github.com/shunnmugam/cas-authentication",
+  "homepage": "https://github.com/firmanhp/cas-authentication",
   "bugs": {
-    "url": "https://github.com/shunnmugam/cas-authentication/issues"
+    "url": "https://github.com/firmanhp/cas-authentication"
   },
   "license": "MIT",
   "author": "Kyle Maguire <kylepixel@gmail.com>",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/shunnmugam/cas-authentication.git"
+    "url": "https://github.com/firmanhp/cas-authentication.git"
   },
   "dependencies": {
     "xml2js": "^0.4.8"
