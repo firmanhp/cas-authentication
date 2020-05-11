@@ -26,6 +26,7 @@ var AUTH_TYPE = {
  * @property {string}  [session_name='cas_user']
  * @property {string}  [session_info=false]
  * @property {boolean} [destroy_session=false]
+ * @property {string}  [logout_return]
  */
 
 /**
@@ -154,6 +155,8 @@ function CASAuthentication(options) {
 
     this.service_url     = options.service_url;
 
+    this.logout_return   = options.logout_return;
+
     this.renew           = options.renew !== undefined ? !!options.renew : false;
 
     this.is_dev_mode     = options.is_dev_mode !== undefined ? !!options.is_dev_mode : false;
@@ -251,8 +254,12 @@ CASAuthentication.prototype._login = function(req, res, next) {
     // Set up the query parameters.
     var query = {
         service: this.service_url + url.parse(req.url).pathname,
-        renew: this.renew
     };
+    
+    // If renew is set to false, better not to provide the query parameter.
+    if (this.renew) {
+        query.renew = this.renew;
+    }
 
     // Redirect to the CAS login.
     res.redirect( this.cas_url + url.format({
@@ -287,7 +294,15 @@ CASAuthentication.prototype.logout = function(req, res, next) {
     }
 
     // Redirect the client to the CAS logout.
-    res.redirect(this.cas_url + '/logout');
+    var query = {};
+    if (this.logout_return) {
+        query.url = this.logout_return;
+    }
+    
+    res.redirect(this.cas_url + url.format({
+        pathname: '/logout',
+        query: query
+    }));
 };
 
 /**
@@ -357,7 +372,7 @@ CASAuthentication.prototype._handleTicket = function(req, res, next) {
                     if (this.session_info) {
                         req.session[ this.session_info ] = attributes || {};
                     }
-                    res.redirect(req.session.cas_return_to);
+                    req.session.save(() => res.redirect(req.session.cas_return_to));
                 }
             }.bind(this));
         }.bind(this));
