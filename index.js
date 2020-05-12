@@ -296,9 +296,15 @@ CASAuthentication.prototype.logout = function(req, res, next) {
     // Redirect the client to the CAS logout.
     var query = {};
     if (this.logout_return) {
-        query.url = this.logout_return;
+        // See https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol-Specification.html#232-response
+        if (this.cas_version === '1.0' || this.cas_version === '2.0') {
+            query.url = this.logout_return;
+        }
+        else if (this.cas_version === '3.0') {
+            query.service = this.logout_return;
+        }
     }
-    
+
     res.redirect(this.cas_url + url.format({
         pathname: '/logout',
         query: query
