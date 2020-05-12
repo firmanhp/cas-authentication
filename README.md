@@ -1,3 +1,13 @@
+This is a forked version of [node-cas-authentication](https://github.com/shunnmugam/cas-authentication).
+
+I've made several small changes to this packages in order to solve problems in my internal project, you can see my changes in my commit list (they're not much):
+
+- [Browser's preloading redirect urls before the session gets saved after a successful CAS login](https://github.com/expressjs/session/issues/360): Now the session gets saved before it gets redirected.
+- Renew paramter now will only be set if and only if it is set to true. Somehow having the default set to false messes up my university's CAS so I had to remove the parameter if it's set to false.
+- (CAS 1/2/3 only) New parameter `logout_return`: This will set `service` or `url` parameter to the given value inside `logout_return` on logout. How this will be handled may vary on different implementations, you may see the expected result on the [specification](https://apereo.github.io/cas/5.1.x/protocol/CAS-Protocol-Specification.html#232-response).*
+
+* I haven't tested this feature on CAS 1.0 and 3.0 as I only have a CAS 2.0 implementation at this time.
+
 # Express CAS Authentication
 
 This is a CAS authentication library designed to be used with an Express server.
@@ -51,6 +61,7 @@ var cas = new CASAuthentication({
 | session_info | _string_ | The name of the session variable that will store the CAS user information once they are authenticated. If set to false (or something that evaluates as false), the additional information supplied by the CAS will not be forwarded. This will not work with CAS 1.0, as it does not support additional user information. | _false_ |
 | destroy_session | _boolean_ | If true, the logout function will destroy the entire session upon CAS logout. Otherwise, it will only delete the session variable storing the CAS user. | _false_ |
 | return_to | _string_ | redirect to this url after successfull login  | "" |
+| logout_return_to | _string_ | if set, will set `service` or `url` parameter to this url on logout | undefined |
 
 ## Usage
 
